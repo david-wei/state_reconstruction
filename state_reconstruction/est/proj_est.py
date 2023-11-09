@@ -53,13 +53,13 @@ def get_local_images(X, Y, image, shape, psf_supersample=5):
     dx, dy : `np.ndarray(1, int)`
         Subpixel shifts.
     """
-    X_int, Y_int = np.round(X).astype(int), np.round(Y).astype(int)
-    dx = np.round((X - X_int) * psf_supersample).astype(int)
-    dy = np.round((Y - Y_int) * psf_supersample).astype(int)
+    X_int, Y_int = np.round(X).astype(np.int32), np.round(Y).astype(np.int32)
+    dx = np.round((X - X_int) * psf_supersample).astype(np.int32)
+    dy = np.round((Y - Y_int) * psf_supersample).astype(np.int32)
     X_min, Y_min = X_int - shape[0] // 2, Y_int - shape[1] // 2
     X_max, Y_max = X_min + shape[0], Y_min + shape[1]
-    local_images = np.zeros((len(X),) + tuple(shape), dtype=float)
-    image = np.array(image)
+    local_images = np.zeros((len(X),) + tuple(shape), dtype=np.float64)
+    image = np.array(image, dtype=np.float64)
     _slice_local_image(local_images, image, X_min, X_max, Y_min, Y_max)
     return {
         "image": local_images, "X_int": X_int, "Y_int": Y_int,
